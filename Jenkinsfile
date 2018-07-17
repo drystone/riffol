@@ -14,7 +14,6 @@ pipeline {
                         }
                     }
                     steps {
-                        sh script: 'echo [$LIBC_VERSION]'
                         sh script: """
                                 $CARGO clean
                                 $CARGO update
@@ -22,8 +21,8 @@ pipeline {
                                 $CARGO build --release
                         """
                         sh script: '''
+                                LIBC_VERSION=$(ldd --version | sed -r 's/(.* )//')
                                 mkdir -p assets
-                                LIBC_VERSION=1.2
                                 tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
                         '''
                     }
