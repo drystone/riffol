@@ -14,7 +14,7 @@ pipeline {
                         }
                     }
                     steps {
-                        sh 'echo ${env.CARGO}'
+                        sh "echo ${env.CARGO}"
                         sh """
                                 $CARGO clean
                                 $CARGO update
