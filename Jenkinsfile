@@ -15,6 +15,7 @@ pipeline {
                     }
                     steps {
                         sh script: """
+                                echo ${LIBC_VERSION}
                                 $CARGO clean
                                 $CARGO update
                                 $CARGO test
