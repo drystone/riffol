@@ -17,7 +17,7 @@ pipeline {
                         sh '''
                             LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
                             mkdir -p assets
-                            cp README.md assets/riffol-$LIBC_VERSION.tar.gz
+                            cp README.adoc assets/riffol-$LIBC_VERSION.tar.gz
                         '''
                     }
                 }
@@ -31,7 +31,7 @@ pipeline {
                         sh '''
                             LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
                             mkdir -p assets
-                            cp README.md assets/riffol-$LIBC_VERSION.tar.gz
+                            cp README.adoc assets/riffol-$LIBC_VERSION.tar.gz
                         '''
                     }
                 }
