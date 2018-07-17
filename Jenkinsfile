@@ -16,11 +16,11 @@ pipeline {
                     steps {
                         sh script: """
                                 $CARGO clean
-                                ${env.CARGO} update
-                                ${env.CARGO} test
-                                ${env.CARGO} build --release
+                                $CARGO update
+                                $CARGO test
+                                $CARGO build --release
                                 mkdir -p assets
-                                tar -C target/release -czf assets/riffol-.tar.gz riffol
+                                tar -C target/release -czf assets/riffol-${LIBC_VERSION}.tar.gz riffol
                         """
                     }
                 }
