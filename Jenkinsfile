@@ -38,6 +38,8 @@ pipeline {
             }
         }
         stage("Upload Assets") {
+            agent any
+            
             steps {
                 sh "ci/release.sh drystone/riffol"
             }
