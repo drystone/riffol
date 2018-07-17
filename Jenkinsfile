@@ -42,7 +42,7 @@ pipeline {
 
             steps {
                 sh """
-                    curl https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 >/usr/bin/jq
+                    curl -o/usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
                     ci/release.sh drystone/riffol
                 """
             }
