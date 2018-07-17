@@ -15,7 +15,7 @@ pipeline {
                     }
                     steps {
                         sh '''
-                                LIBC_VERSION=$(ldd --version | sed -r 's/(.* )//')
+                                LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
                                 echo $LIBC_VERSION
                                 $CARGO clean
                                 $CARGO update
