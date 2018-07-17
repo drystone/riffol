@@ -41,6 +41,7 @@ pipeline {
             agent any
             
             steps {
+                sh "ls -l ci"
                 sh "ci/release.sh drystone/riffol"
             }
         }
