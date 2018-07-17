@@ -21,6 +21,7 @@ pipeline {
                                 $CARGO test
                                 $CARGO build --release
                                 mkdir -p assets
+                                LIBC_VERSION=1.2
                                 tar -C target/release -czf assets/riffol-${LIBC_VERSION}.tar.gz riffol
                         """
                     }
