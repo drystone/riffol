@@ -41,10 +41,12 @@ pipeline {
             agent any
 
             steps {
-                sh """
+                sh '''
                     curl -o/usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+                    ls /usr/bin
+                    echo $PATH
                     ci/release.sh drystone/riffol
-                """
+                '''
             }
         }
     }
