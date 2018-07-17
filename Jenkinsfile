@@ -14,15 +14,13 @@ pipeline {
                         }
                     }
                     steps {
-                        sh "echo ${env.CARGO}"
-                        sh """
+                        sh '''
+                                LIBC_VERSION=$(ldd --version | sed -r 's/(.* )//')
+                                echo $LIBC_VERSION
                                 $CARGO clean
                                 $CARGO update
                                 $CARGO test
                                 $CARGO build --release
-                        """
-                        sh '''
-                                LIBC_VERSION=$(ldd --version | sed -r 's/(.* )//')
                                 mkdir -p assets
                                 tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
                         '''
