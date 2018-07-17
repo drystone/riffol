@@ -50,7 +50,7 @@ pipeline {
             }
         }
         stage("Upload Assets") {
-            sh ci/release.sh drysone/riffol
+            sh "ci/release.sh drystone/riffol"
         }
     }
 }
