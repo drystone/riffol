@@ -1,7 +1,7 @@
 pipeline {
     agent none
     stages {
-        stage("Distros") {
+        stage("Test and Build") {
             environment {
                 CARGO = "~/.cargo/bin/cargo"
                 BINARY = "target/release/bin/riffol"
@@ -14,10 +14,6 @@ pipeline {
                         }
                     }
                     steps {
-                        sh '''
-                            LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
-                            echo $LIBC_VERSION
-                        '''
                         sh """
                             $CARGO clean
                             $CARGO update
@@ -25,6 +21,7 @@ pipeline {
                             $CARGO build --release
                         """
                         sh '''
+                            LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
                             mkdir -p assets
                             tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
                         '''
@@ -37,12 +34,23 @@ pipeline {
                         }
                     }
                     steps {
-                        sh "${env.CARGO} clean && ${env.CARGO} update && ${env.CARGO} test"
-                        sh "${env.CARGO} build --release"
-                        sh "mkdir -p assets && cd target/release && tar -czf ../../assets/riffol-$LIBC_VERSION.tar.gz riffol"
+                        sh """
+                            $CARGO clean
+                            $CARGO update
+                            $CARGO test
+                            $CARGO build --release
+                        """
+                        sh '''
+                            LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
+                            mkdir -p assets
+                            tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
+                        '''
                     }
                 }
             }
+        }
+        stage("Upload Assets") {
+            sh ci/release.sh drysone/riffol
         }
     }
 }
