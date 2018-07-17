@@ -14,13 +14,13 @@ pipeline {
                         }
                     }
                     steps {
-                        sh script: """ \
-                                $CARGO clean \
-                                ${env.CARGO} update \
-                                ${env.CARGO} test \
-                                ${env.CARGO} build --release \
-                                mkdir -p assets \
-                                tar -C target/release -czf assets/riffol-.tar.gz riffol \
+                        sh script: """
+                                $CARGO clean
+                                ${env.CARGO} update
+                                ${env.CARGO} test
+                                ${env.CARGO} build --release
+                                mkdir -p assets
+                                tar -C target/release -czf assets/riffol-.tar.gz riffol
                         """
                     }
                 }
