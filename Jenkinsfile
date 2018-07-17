@@ -39,15 +39,10 @@ pipeline {
         }
         stage("Upload Assets") {
             agent any
-            
+
             steps {
                 sh """
-                    git clone https://github.com/stedolan/jq.git
-                    cd jq
-                    autoreconf -i
-                    ./configure --disable-maintainer-mode
-                    make
-                    sudo make install
+                    curl https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 >/usr/bin/jq
                     ci/release.sh drystone/riffol
                 """
             }
