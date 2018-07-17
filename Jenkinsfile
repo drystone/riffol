@@ -15,14 +15,18 @@ pipeline {
                     }
                     steps {
                         sh '''
-                                LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
-                                echo $LIBC_VERSION
-                                $CARGO clean
-                                $CARGO update
-                                $CARGO test
-                                $CARGO build --release
-                                mkdir -p assets
-                                tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
+                            LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
+                            echo $LIBC_VERSION
+                        '''
+                        sh """
+                            $CARGO clean
+                            $CARGO update
+                            $CARGO test
+                            $CARGO build --release
+                        """
+                        sh '''
+                            mkdir -p assets
+                            tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
                         '''
                     }
                 }
