@@ -41,7 +41,15 @@ pipeline {
             agent any
             
             steps {
-                sh "ci/release.sh drystone/riffol"
+                sh """
+                    git clone https://github.com/stedolan/jq.git
+                    cd jq
+                    autoreconf -i
+                    ./configure --disable-maintainer-mode
+                    make
+                    sudo make install
+                    ci/release.sh drystone/riffol
+                """
             }
         }
     }
