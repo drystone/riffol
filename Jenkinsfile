@@ -15,15 +15,16 @@ pipeline {
                     }
                     steps {
                         sh """
-                            $CARGO clean
-                            $CARGO update
-                            $CARGO test
-                            $CARGO build --release
+                            # $CARGO clean
+                            # $CARGO update
+                            # $CARGO test
+                            # $CARGO build --release
                         """
                         sh '''
                             LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
                             mkdir -p assets
-                            tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
+                            cp README.md assets/riffol-$LIBC_VERSION.tar.gz
+                            # tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
                         '''
                     }
                 }
@@ -35,15 +36,16 @@ pipeline {
                     }
                     steps {
                         sh """
-                            $CARGO clean
-                            $CARGO update
-                            $CARGO test
-                            $CARGO build --release
+                            # $CARGO clean
+                            # $CARGO update
+                            # $CARGO test
+                            # $CARGO build --release
                         """
                         sh '''
                             LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
                             mkdir -p assets
-                            tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
+                            cp README.md assets/riffol-$LIBC_VERSION.tar.gz
+                            # tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
                         '''
                     }
                 }
