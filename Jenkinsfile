@@ -15,15 +15,16 @@ pipeline {
                     }
                     steps {
                         sh script: """
-                                echo \\$LIBC_VERSION
                                 $CARGO clean
                                 $CARGO update
                                 $CARGO test
                                 $CARGO build --release
+                        """
+                        sh script: '''
                                 mkdir -p assets
                                 LIBC_VERSION=1.2
-                                tar -C target/release -czf assets/riffol-\\$LIBC_VERSION.tar.gz riffol
-                        """
+                                tar -C target/release -czf assets/riffol-$LIBC_VERSION.tar.gz riffol
+                        '''
                     }
                 }
                 stage("CentOS") {
