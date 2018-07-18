@@ -50,7 +50,9 @@ pipeline {
         }
         stage("Upload Assets") {
             agent any
-
+            when {
+                 branch 'master'
+            }
             environment {
                 OAUTH = credentials("GitHub")
             }
