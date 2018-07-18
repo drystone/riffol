@@ -10,7 +10,7 @@
 //    documentation and/or other materials provided with the distribution.
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NO/T
+// ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
 // OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
@@ -21,38 +21,28 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-extern crate libc;
+extern crate syslog;
+
+use std::net::SocketAddr;
 
 #[derive(Debug, Clone)]
-pub enum Limit {
-    Num(u64),
-    Infinity,
+pub enum Address {
+    Tcp(SocketAddr),
+    Udp {
+        server: SocketAddr,
+        local: SocketAddr,
+    },
+    Unix(Option<String>),
 }
 
 #[derive(Debug, Clone)]
-pub enum RLimit {
-    Memory(Limit),
-    Procs(Limit),
-    Files(Limit),
-}
-
-pub fn setlimit(rlimit: &RLimit) {
-    let (resource, limit) = match rlimit {
-        RLimit::Memory(v) => (libc::RLIMIT_AS, v),
-        RLimit::Procs(v) => (libc::RLIMIT_NPROC, v),
-        RLimit::Files(v) => (libc::RLIMIT_NOFILE, v),
-    };
-    let limit = match limit {
-        Limit::Num(v) => *v,
-        Limit::Infinity => libc::RLIM_INFINITY,
-    };
-    unsafe {
-        let _result = libc::setrlimit(
-            resource,
-            &libc::rlimit {
-                rlim_cur: limit,
-                rlim_max: limit,
-            },
-        );
-    };
+pub enum Stream {
+    File {
+        filename: String,
+    },
+    Syslog {
+        address: Address,
+        facility: syslog::Facility,
+        severity: u32, // syslog::Severity doesn't implement Debug,
+    },
 }
