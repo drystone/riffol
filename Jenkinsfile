@@ -5,7 +5,7 @@ pipeline {
             agent any
 
             environment {
-                OAUTH = credentials("704569ba-d880-401d-86b9-0894c11ec46c")
+                OAUTH = credentials("GitHub")
             }
             steps {
                 sh '''
