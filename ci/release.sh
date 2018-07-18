@@ -5,8 +5,8 @@ if ! jq --version >/dev/null 2>&1 ; then
     exit 1
 fi
 
-if [ -z $oauth ]; then
-    echo "No \$oauth in environment" 1>&2
+if [ -z $OAUTH ]; then
+    echo "No \$OAUTH in environment" 1>&2
     exit 1
 fi
 
@@ -35,7 +35,7 @@ release_id=$(
 # create a release if none already for this version
 if [ -z $release_id ]; then
     echo "Creating release for $version"
-    release_id=$(curl -s -X POST -d@- $release?access_token=$oauth | jq -r '"\(.id)"' 2>/dev/null) <<EOF
+    release_id=$(curl -s -X POST -d@- $release?access_token=$OAUTH | jq -r '"\(.id)"' 2>/dev/null) <<EOF
 {
     "tag_name": "$version"
 }
@@ -49,22 +49,22 @@ else
 fi
 
 # get upload url
-upload=$(curl -s $release/$release_id?access_token=$oauth | jq -r '"\(.upload_url)"' | cut -d'{' -f1)
+upload=$(curl -s $release/$release_id?access_token=$OAUTH | jq -r '"\(.upload_url)"' | cut -d'{' -f1)
 for i in assets/*.tar.gz; do
     if [ -f $i ]; then
         asset_name=$(basename $i)
         asset_id=$(
-            curl -s $release/$release_id/assets?access_token=$oauth \
+            curl -s $release/$release_id/assets?access_token=$OAUTH \
                 | jq -r '.[] | "\(.name) \(.id)"' \
                 | grep -F $asset_name | cut -d' ' -f2
                 )
         # delete asset if already exists
         if ! [ -z $asset_id ]; then
             echo "Deleting existing $asset_name asset"
-            curl -s -X DELETE $release/assets/$asset_id?access_token=$oauth
+            curl -s -X DELETE $release/assets/$asset_id?access_token=$OAUTH
         fi
         # upload asset
         echo "Uploading $asset_name asset"
-        curl -s -X POST -H "Content-type: application/gzip" -d@- "$upload?name=$asset_name&access_token=$oauth" <$i >/dev/null
+        curl -s -X POST -H "Content-type: application/gzip" -d@- "$upload?name=$asset_name&access_token=$OAUTH" <$i >/dev/null
     fi
 done
