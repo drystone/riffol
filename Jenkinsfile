@@ -6,7 +6,7 @@ pipeline {
                 CARGO = "~/.cargo/bin/cargo"
             }
             stages {
-                stage("Debian Test") {
+                stage("Debian") {
                     agent {
                         dockerfile {
                             dir "ci/debian"
@@ -19,18 +19,6 @@ pipeline {
                             $CARGO test
                             $CARGO build --release
                         """
-                    }
-                }
-                stage("Debian Build") {
-                    agent {
-                        dockerfile {
-                            dir "ci/debian"
-                        }
-                    }
-                    when {
-                        branch 'master'
-                    }
-                    steps {
                         sh '''
                             LIBC_VERSION=$(ldd --version | head -n1 | sed -r 's/(.* )//')
                             mkdir -p assets
@@ -62,9 +50,7 @@ pipeline {
         }
         stage("Upload Assets") {
             agent any
-            when {
-                branch 'master'
-            }
+
             environment {
                 OAUTH = credentials("GitHub")
             }
