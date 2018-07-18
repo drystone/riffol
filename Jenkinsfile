@@ -4,6 +4,9 @@ pipeline {
         stage("Upload Assets") {
             agent any
 
+            environment {
+                OAUTH = credentials("704569ba-d880-401d-86b9-0894c11ec46c")
+            }
             steps {
                 sh '''
                     echo $OAUTH
@@ -16,8 +19,6 @@ pipeline {
         stage("Test and Build") {
             environment {
                 CARGO = "~/.cargo/bin/cargo"
-                BINARY = "target/release/bin/riffol"
-                OAUTH = credentials("704569ba-d880-401d-86b9-0894c11ec46c")
             }
             stages {
                 stage("Debian") {
